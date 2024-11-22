@@ -159,7 +159,7 @@ class PacmanGraphics:
         self.currentGhostImages = {}
         self.pacmanImage = None
         self.zoom = zoom
-        self.gridSize = DEFAULT_GRID_SIZE * zoom
+        self.gridSize = (DEFAULT_GRID_SIZE * zoom)* 0.85
         self.capture = capture
         self.frameTime = frameTime
 
