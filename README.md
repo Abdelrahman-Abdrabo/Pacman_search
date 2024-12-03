@@ -1,4 +1,4 @@
-# Berkeley AI Pacman Search Project 🧠👾  
+# Berkeley AI Pacman Search Project
 
 This repository contains our solutions for the **Berkeley AI Pacman Search Project**, where Pacman uses search algorithms to navigate mazes and solve challenges.  
 
