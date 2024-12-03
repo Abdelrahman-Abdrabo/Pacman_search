@@ -90,32 +90,41 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
+
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    node = {'state': problem.getStartState(), 'cost': 0}
-    if problem.isGoalState(node['state']):
+    """
+    
+    problem.getStartState() --> (34,16)
+    problem.isGoalState(problem.getStartState()) --> bool
+    problem.getSuccessors(problem.getStartState()) --> [((34,15),'South', 1),((33,16),'West', 1)]
+    
+    """
+    start_state = problem.getStartState()
+    if problem.isGoalState(start_state):
         return []
-    frontier = util.Queue()
-    frontier.push(node)
-    explored = set()
-    while True:
-        if frontier.isEmpty():
-            raise Exception('No solution')
-        node = frontier.pop()
-        explored.add(node['state'])
-        successors = problem.getSuccessors(node['state'])
-        for successor in successors:
-            child ={'state': successor[0],'action':successor[1] ,'cost': successor[2], 'parent':node}
-            if child['state'] not in explored:
-                if problem.isGoalState(child['state']):
-                    actions =[]
-                    node = child
-                    while 'parent' in node:
-                        actions.append(node['action'])
-                        node = node['parent']
 
-                    return actions[::-1]
-                frontier.push(child)
+    exploration_queue = util.Queue()
+    exploration_queue.push((start_state, []))
+    expanded_nodes = set()
+
+    while not exploration_queue.isEmpty():
+        current_state, actions = exploration_queue.pop()
+        if current_state in expanded_nodes:
+            continue
+
+        expanded_nodes.add(current_state)
+
+        if problem.isGoalState(current_state):
+            return actions
+
+        for successor, action, step_cost in problem.getSuccessors(current_state):
+            # ignoring the cost
+            if successor not in expanded_nodes:
+                exploration_queue.push((successor, actions + [action]))
+
+    raise Exception("No solution")
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
