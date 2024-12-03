@@ -18,3 +18,7 @@ This repository contains our solutions for the **Berkeley AI Pacman Search Proje
 - **Ester Emad**
 - **Fatma Mohammed**
 ---
+
+> **NOTE**  
+> You need python 3.11 to run the AutoGrader.py file.
+> You can download it from here https://www.python.org/downloads/release/python-3117/
