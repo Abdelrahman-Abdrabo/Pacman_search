@@ -80,26 +80,41 @@ def depthFirstSearch(problem):
     Your search algorithm needs to return a list of actions that reaches the
     goal. Make sure to implement a graph search algorithm.
 
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
+    problem.getStartState() --> (34,16)
+    problem.isGoalState(problem.getStartState()) --> bool
+    problem.getSuccessors(problem.getStartState()) --> [((34,15),'South', 1),((33,16),'West', 1)]
 
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    start_state = problem.getStartState()
+    if problem.isGoalState(start_state):
+        return []
+
+    myStack = util.Stack()
+    myStack.push((start_state, []))
+    expanded_nodes = set()
+
+    while not myStack.isEmpty():
+        current_state, actions = myStack.pop()
+
+        if current_state in expanded_nodes:
+            continue
+
+        expanded_nodes.add(current_state)
+
+        if problem.isGoalState(current_state):
+            return actions
+
+        for successor, action, step_cost in problem.getSuccessors(current_state):
+            if successor not in expanded_nodes:
+                myStack.push((successor, actions + [action]))
+
+    raise Exception("No solution")
+
 
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    """
-    
-    problem.getStartState() --> (34,16)
-    problem.isGoalState(problem.getStartState()) --> bool
-    problem.getSuccessors(problem.getStartState()) --> [((34,15),'South', 1),((33,16),'West', 1)]
-    
-    """
+
     start_state = problem.getStartState()
     if problem.isGoalState(start_state):
         return []
