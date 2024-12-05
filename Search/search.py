@@ -128,6 +128,9 @@ def uniformCostSearch(problem):
     pending_nodes = util.PriorityQueue()
     start_state = problem.getStartState()
 
+    if problem.isGoalState(start_state):
+        return []
+
     pending_nodes.push((start_state, [], 0), 0)
     expanded_nodes = set()
 
@@ -142,7 +145,6 @@ def uniformCostSearch(problem):
         if problem.isGoalState(current_state):
             return actions
 
-        # Explore childs
         for child, action, step_cost in problem.getSuccessors(current_state):
             if child not in expanded_nodes:
                 total_cost = current_cost + step_cost
@@ -164,6 +166,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     pending_nodes = util.PriorityQueue()
     start_state = problem.getStartState()
 
+    if problem.isGoalState(start_state):
+        return []
     pending_nodes.push((start_state, [], 0), 0 + heuristic(start_state, problem))
     expanded_nodes = set()
 
@@ -178,7 +182,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         if problem.isGoalState(current_state):
             return actions
 
-        # Explore childs
         for child, action, step_cost in problem.getSuccessors(current_state):
             if child not in expanded_nodes:
                 total_cost = current_cost + step_cost
