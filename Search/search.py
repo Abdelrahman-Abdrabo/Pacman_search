@@ -73,28 +73,25 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def depthFirstSearch(problem):
+
+def graph_search(problem, pending_nodes):
     """
-    Search the deepest nodes in the search tree first.
-
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
-
+    A generalized graph search algorithm that works with different data structures.
+    pending_nodes: A data structure (Stack for DFS, Queue for BFS) to manage exploration
+    --------------------------------------------------
     problem.getStartState() --> (34,16)
     problem.isGoalState(problem.getStartState()) --> bool
     problem.getSuccessors(problem.getStartState()) --> [((34,15),'South', 1),((33,16),'West', 1)]
-
     """
     start_state = problem.getStartState()
     if problem.isGoalState(start_state):
         return []
 
-    myStack = util.Stack()
-    myStack.push((start_state, []))
+    pending_nodes.push((start_state, []))
     expanded_nodes = set()
 
-    while not myStack.isEmpty():
-        current_state, actions = myStack.pop()
+    while not pending_nodes.isEmpty():
+        current_state, actions = pending_nodes.pop()
 
         if current_state in expanded_nodes:
             continue
@@ -106,45 +103,53 @@ def depthFirstSearch(problem):
 
         for successor, action, step_cost in problem.getSuccessors(current_state):
             if successor not in expanded_nodes:
-                myStack.push((successor, actions + [action]))
+                pending_nodes.push((successor, actions + [action]))
 
     raise Exception("No solution")
 
+
+def depthFirstSearch(problem):
+    """
+    Search the deepest nodes in the search tree first.
+    """
+    return graph_search(problem, util.Stack())
 
 
 def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
-
-    start_state = problem.getStartState()
-    if problem.isGoalState(start_state):
-        return []
-
-    exploration_queue = util.Queue()
-    exploration_queue.push((start_state, []))
-    expanded_nodes = set()
-
-    while not exploration_queue.isEmpty():
-        current_state, actions = exploration_queue.pop()
-        if current_state in expanded_nodes:
-            continue
-
-        expanded_nodes.add(current_state)
-
-        if problem.isGoalState(current_state):
-            return actions
-
-        for successor, action, step_cost in problem.getSuccessors(current_state):
-            # ignoring the cost
-            if successor not in expanded_nodes:
-                exploration_queue.push((successor, actions + [action]))
-
-    raise Exception("No solution")
+    """
+    Search the shallowest nodes in the search tree first.
+    """
+    return graph_search(problem, util.Queue())
 
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    pending_nodes = util.PriorityQueue()
+    start_state = problem.getStartState()
+
+    pending_nodes.push((start_state, [], 0), 0)
+    expanded_nodes = set()
+
+    while not pending_nodes.isEmpty():
+        current_state, actions, current_cost = pending_nodes.pop()
+
+        if current_state in expanded_nodes:
+            continue
+
+        expanded_nodes.add(current_state)
+
+        if problem.isGoalState(current_state):
+            return actions
+
+        # Explore childs
+        for child, action, step_cost in problem.getSuccessors(current_state):
+            if child not in expanded_nodes:
+                total_cost = current_cost + step_cost
+                pending_nodes.push((child, actions + [action], total_cost), total_cost)
+
+    raise Exception("No solution found")
+
 
 def nullHeuristic(state, problem=None):
     """
@@ -155,8 +160,33 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    pending_nodes = util.PriorityQueue()
+    start_state = problem.getStartState()
+
+    pending_nodes.push((start_state, [], 0), 0 + heuristic(start_state, problem))
+    expanded_nodes = set()
+
+    while not pending_nodes.isEmpty():
+        current_state, actions, current_cost = pending_nodes.pop()
+
+        if current_state in expanded_nodes:
+            continue
+
+        expanded_nodes.add(current_state)
+
+        if problem.isGoalState(current_state):
+            return actions
+
+        # Explore childs
+        for child, action, step_cost in problem.getSuccessors(current_state):
+            if child not in expanded_nodes:
+                total_cost = current_cost + step_cost
+                priority = total_cost + heuristic(child, problem)
+                pending_nodes.push((child, actions + [action], total_cost), priority)
+
+    raise Exception("No solution found")
+
 
 
 # Abbreviations
