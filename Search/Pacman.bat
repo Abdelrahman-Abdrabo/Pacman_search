@@ -11,7 +11,7 @@ if errorlevel 1 (
 )
 
 :: Define maze names
-set mazes=bigCorners bigMaze bigSafeSearch bigSearch boxSearch capsuleClassic contestClassic contoursMaze greedySearch mediumClassic mediumCorners mediumDottedMaze mediumMaze mediumSafeSearch mediumScaryMaze mediumSearch minimaxClassic oddSearch openClassic openMaze openSearch originalClassic powerClassic smallClassic smallMaze smallSafeSearch smallSearch testClassic testMaze testSearch tinyCorners tinyMaze tinySafeSearch tinySearch trappedClassic trickyClassic trickySearch
+set mazes=bigMaze mediumMaze smallMaze bigCorners bigSafeSearch bigSearch boxSearch capsuleClassic contestClassic contoursMaze greedySearch mediumClassic mediumCorners mediumDottedMaze mediumSafeSearch mediumScaryMaze mediumSearch minimaxClassic oddSearch openClassic openMaze openSearch originalClassic powerClassic smallClassic smallSafeSearch smallSearch testClassic testMaze testSearch tinyCorners tinyMaze tinySafeSearch tinySearch trappedClassic trickyClassic trickySearch
 
 :: Define algorithms
 set algorithms=bfs dfs astar ucs
